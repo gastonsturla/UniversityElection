@@ -2,18 +2,20 @@ package sturla.blockchain.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sturla.blockchain.model.Transaction;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class LeaderBoardService {
 
-    private TransactionService transactionService;
+    private BlockService blockService;
 
-    public LeaderBoardService (TransactionService transactionService) {
-        this.transactionService = transactionService;
+    public LeaderBoardService (BlockService blockService) {
+        this.blockService = blockService;
     }
 
     @Autowired
@@ -21,17 +23,19 @@ public class LeaderBoardService {
 
     public Map<Integer, Integer> getTable() {
         Map<Integer, Integer> table = new HashMap<>();
-        List<Transaction> transactions = transactionService.getPoolTransactions();
-        transactions.stream().forEach(
-                transaction -> {
-                    Optional<Integer> item = Optional.ofNullable(table.get(transaction.getVote().getProposal().getId()));
-                    if (item.isPresent()) {
-                        table.put(transaction.getVote().getProposal().getId(), item.get() + transaction.getVote().getQuantity());
-                    } else {
-                        table.put(transaction.getVote().getProposal().getId(), transaction.getVote().getQuantity());
+
+        blockService.getBlocks().forEach(block -> {
+            block.getTransactions().stream().forEach(
+                    transaction -> {
+                        Optional<Integer> item = Optional.ofNullable(table.get(transaction.getVote().getProposal().getId()));
+                        if (item.isPresent()) {
+                            table.put(transaction.getVote().getProposal().getId(), item.get() + transaction.getVote().getQuantity());
+                        } else {
+                            table.put(transaction.getVote().getProposal().getId(), transaction.getVote().getQuantity());
+                        }
                     }
-                }
-        );
+            );
+        });
 
         return table.entrySet()
                 .stream()

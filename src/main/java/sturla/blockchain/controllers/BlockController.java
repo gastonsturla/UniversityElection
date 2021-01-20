@@ -28,8 +28,4 @@ public class BlockController {
         blockService.insertBlock(block);
     }
 
-    @GetMapping("/block/lastHash")
-    public String getLastHash(){
-        return blockService.getLatestHashBlock();
-    }
 }

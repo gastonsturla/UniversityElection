@@ -1,7 +1,5 @@
 package sturla.blockchain.model;
 
-import jdk.jfr.Label;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.extern.java.Log;
@@ -20,4 +18,11 @@ public class Block {
     private LocalDateTime dateTime;
     private List<Transaction> transactions;
 
+    public String getNonce() {
+        return "nonce";
+    }
+
+    public void addTransaction(Transaction t){
+        this.transactions.add(t);
+    }
 }

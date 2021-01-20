@@ -2,10 +2,7 @@ package sturla.blockchain.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sturla.blockchain.model.Proposal;
-import sturla.blockchain.model.Transaction;
-import sturla.blockchain.model.User;
-import sturla.blockchain.model.Vote;
+import sturla.blockchain.model.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -63,5 +60,20 @@ public class TransactionService {
     public void insertTransaction(Transaction t){
         t.setTime(LocalDateTime.now());
         transactions.add(t);
+    }
+
+    public void removeByTransactionID(Integer id){
+        for (Transaction t: this.transactions) {
+            if (t.getId().equals(id)){
+                this.transactions.remove(t);
+                break;
+            }
+        }
+    }
+
+    public void cleanProcesedTransactions(Block newBlock){
+        newBlock.getTransactions().stream().forEach(transaction -> {
+            removeByTransactionID(transaction.getId());
+        });
     }
 }
