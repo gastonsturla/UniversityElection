@@ -15,7 +15,7 @@ public class TransactionService {
 
     public TransactionService(){
         this.transactions = new ArrayList<>();
-        User u = User.builder().userName("Gaston").password("1234").build();
+        User u = User.builder().name("Gaston").password("1234").build();
         Proposal p = Proposal.builder().name("Propuesta A").id(1).build();
         Proposal p2 = Proposal.builder().name("Propuesta B").id(2).build();
         Proposal p3 = Proposal.builder().name("Propuesta B").id(3).build();
